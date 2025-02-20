@@ -33,11 +33,11 @@ const userschema = new mongoose.Schema({
 //In order to use the sault to hash the password we have to do some pre computation:
 userschema.pre('save', function (next) {
     const user = this
-    if (!user.isModified(this.password)) return next()
+    if (!user.isModified('password')) return next()
     // if (!user.isModified('password')) return next()
     //And now in order to do the hasshing we have to use the builtin package called cripto
 
-    const sault = randomBytes(16).toString()
+    const sault =randomBytes(16).toString()
     const hashedpassword = createHmac('sha256', sault)
                             .update(user.password)
                             .digest('hex')
@@ -46,17 +46,19 @@ userschema.pre('save', function (next) {
     next()
 })
 
-userschema.static("matchpassword" , function(email , password){
-    const user=this.findOne({email})
-    if(!user) return false
-    
+userschema.static("matchpassword" , async function(email , password){
+    const user=await this.findOne({email})
+    if(!user)  throw new Error('This mail id is not registered yet')
+    // const sault='somerandosault'
     const sault=user.sault
     const hashedpassword=user.password
 
     const userprovidedhash=createHmac('sha256', sault)
                             .update(password)
                             . digest('hex')
-    return hashedpassword === userprovidedhash
+    // if(hashedpassword === userprovidedhash) return {...user._documet , password:undefined , sault:undefined}
+    if(hashedpassword === userprovidedhash) return user
+    else throw new Error('Wrong password:');
 })
 
 const user = model('user', userschema)
