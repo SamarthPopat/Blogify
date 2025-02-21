@@ -1,7 +1,10 @@
 import express from 'express' 
 import path from 'path' 
 import useroute from './routes/user.js' 
+import blogroute from './routes/blog.js' 
 import connection from './connection.js' 
+import cookiesparser from 'cookie-parser'
+import checkforauthenticationcookie from './middlewares/authentication.js'
 const app=express();
 const port=8000
 
@@ -23,16 +26,21 @@ connection("mongodb://localhost:27017/bloguser")
 //And here we are handling with the form data:---.so please first uncode it:
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
+app.use(cookiesparser())
+app.use(checkforauthenticationcookie('token'))
 
 
 app.set('view engine' , 'ejs')
 app.set('views' , path.resolve("./view"))
 
 app.get('/' , (req,res)=>{
-    return res.render('home')
+    return res.render('home' , {
+        user: req.user
+    })
 })
 
 app.use('/user' , useroute)
+app.use('/blog' , blogroute)
 
 app.listen(port , (err) =>{
     console.log(`The server has been started on the port number ${port}`);

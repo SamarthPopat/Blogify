@@ -10,9 +10,17 @@ router.get('/signup', (req, res) => {
 })
 
 router.post('/signin', async (req, res) => {
-    const { email, password } = req.body
-    const nuser = await user.matchpassword(email, password)
-    return res.redirect('/')
+    try{
+        const { email, password } = req.body
+        // const nuser = await user.matchpassword(email, password)
+        const token = await user.matchpasswordandgeneratetoken(email, password)
+        // console.log(token);.
+        return res.cookie('token' , token).redirect('/')
+    }catch (err){
+        return res.render('signin' , {
+            error:  err,
+        })
+    }
 })
 
 router.post('/signup', async (req, res) => {
@@ -30,5 +38,9 @@ router.post('/signup', async (req, res) => {
         return res.status(500).json({ status: "Error occurred while signing up" });
     }
 });
+
+router.get('/logout' ,(req,res) => {
+    res.clearCookie('token').redirect('signin')
+})
 
 export default router
