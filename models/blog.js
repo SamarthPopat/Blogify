@@ -1,5 +1,5 @@
-import mongoose, {model} from 'mongoose'
-const blogschema=new Schema({
+import mongoose, {model, Schema} from 'mongoose'
+const blogschema=new mongoose.Schema({
     title:{
         type:String,
         require:true
@@ -13,7 +13,7 @@ const blogschema=new Schema({
         require:false
     },
     createdby:{
-        type:Schema.Types.ObjectId,//This is an built in type:
+        type: Schema.Types.ObjectId,//This is an built in type:
         ref: "user"//This will point to the user:
     },
 },{timestamps:true})

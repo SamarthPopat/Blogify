@@ -5,6 +5,7 @@ import blogroute from './routes/blog.js'
 import connection from './connection.js' 
 import cookiesparser from 'cookie-parser'
 import checkforauthenticationcookie from './middlewares/authentication.js'
+import blog from './models/blog.js'//In order to get the all of the blogs and to render it on the page of home:
 const app=express();
 const port=8000
 
@@ -28,14 +29,20 @@ app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 app.use(cookiesparser())
 app.use(checkforauthenticationcookie('token'))
+//Now the express is not going to show us the static thing and the by sedult the express is going to treat the path of the file
+//as the path of the website:-->So we have to tell the express that you can use this folder things as the static contity
+app.use(express.static(path.resolve('./public')))
 
 
 app.set('view engine' , 'ejs')
 app.set('views' , path.resolve("./view"))
 
-app.get('/' , (req,res)=>{
+app.get('/' , async (req,res)=>{
+    // const allblogs=await blog.find({}).sort('createdAt' , -1)
+    const allblogs=await blog.find({})
     return res.render('home' , {
-        user: req.user
+        user: req.user,
+        blogs:  allblogs,
     })
 })
 

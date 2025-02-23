@@ -32,10 +32,13 @@ router.post('/signup', async (req, res) => {
             email,
             password
         });
-        return res.redirect('/');
+        return res.status(200).redirect('/');
     } catch (error) {
-        console.error("Error creating user:", error);
-        return res.status(500).json({ status: "Error occurred while signing up" });
+        // console.error("Error creating user:", error);
+        // return res.status(500).json({ status: "Error occurred while signing up" });
+        return res.render('signup' , {
+            error : err,
+        })
     }
 });
 

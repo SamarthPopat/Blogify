@@ -22,7 +22,7 @@ const userschema = new mongoose.Schema({
     },
     profileimageurl: {
         type: String,
-        default: '/images/default.jpeg'
+        default: '/public/images/default.jpeg'
     },
     role: {
         type: String,
@@ -44,7 +44,6 @@ userschema.pre('save', function (next) {
                             .digest('hex')
     this.sault=sault
     this.password=hashedpassword 
-    this.password=hashedpassword 
     next()
 })
 
@@ -60,7 +59,7 @@ userschema.static("matchpasswordandgeneratetoken" , async function(email , passw
                             . digest('hex')
     // if(hashedpassword === userprovidedhash) return {...user._documet , password:undefined , sault:undefined}
     // if(hashedpassword === userprovidedhash) return user -->Insted of this we are going to return a token:
-    if(hashedpassword !== userprovidedhash) throw new Error('Wrong password:') 
+    if(hashedpassword !== userprovidedhash) throw new Error('Wrong password:)') 
     const token=createtokenforuser(user)
     return token
     
