@@ -5,11 +5,11 @@ import {createtokenforuser , validatetoken} from '../servises/uthentication.js'
 const userschema = new mongoose.Schema({
     fullname: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     sault: {
@@ -18,11 +18,11 @@ const userschema = new mongoose.Schema({
     },
     password: {
         type: String,
-        require: true,
+        required: true,
     },
     profileimageurl: {
         type: String,
-        default: '/public/images/default.jpeg'
+        default: '/images/defult.jpg'
     },
     role: {
         type: String,

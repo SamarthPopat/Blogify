@@ -2,6 +2,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import path from 'path'
 import blog from '../models/blog.js'
+import comment from '../models/comment.js'
 const router = Router()
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -32,7 +33,7 @@ router.post('/', upload.single('coverimage') ,async (req,res) => {
       coverimageurl : `/uploads/${req.file.filename}`
     })
     req.Blog=Blog
-    console.log(Blog._id);
+    // console.log(Blog._id);
     return res.redirect(`/blog/${Blog._id}`)
     // return res.redirect("/")
 })
@@ -41,10 +42,30 @@ router.post('/', upload.single('coverimage') ,async (req,res) => {
 //This is the route of the get which is dynamic route:
 router.get('/:id' , async (req,res)=>{
   // if(req.cookie!='token') return res.render('signin')
-  const Blog =  await blog.findById(req.params.id)
+  const Blog =  await blog.findById(req.params.id).populate('createdby')
+  // console.log(Blog);//This is going to embaded the user hole object which is created this blog inside that:
+ 
+  //Now we are going to add one of the new feature in which if the user is going to open this blog
+  // They can also see the comments on it
+  const allcomments=await comment.find({
+    blogid: req.params.id
+  }).populate('createdby')
+ 
+  // console.log(allcomments);
   return res.render('blogrender',{
     user : req.user,
-    blog : Blog
+    blog : Blog,
+    comment: allcomments
   })
+})
+
+router.post('/comment/:blogid' ,async (req,res)=>{
+  // const ncomment = await comment.create({
+  await comment.create({
+    content: req.body.content,
+    blogid: req.params.blogid,
+    createdby: req.user._id
+  })
+  return res.redirect(`/blog/${req.params.blogid}`)
 })
 export default router
