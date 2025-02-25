@@ -15,6 +15,7 @@ const port=process.env.PORT || 8000
 //Connection the mongoose
 // connection("mongodb://localhost:27017/bloguser")
 // And after the further step you have to change the name of the file by index.js to the app.js
+console.log("Checking the mongour--->",process.env.MONGO_URL);
 connection(process.env.MONGO_URL)
 .then(()=>{
     console.log("Mongo has been connected successfully")
