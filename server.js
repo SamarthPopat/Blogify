@@ -9,7 +9,7 @@ import checkforauthenticationcookie from './middlewares/authentication.js'
 import blog from './models/blog.js'//In order to get the all of the blogs and to render it on the page of home:
 const app=express();
 // console.log('my name ',process.env.myname)same that the aws is going to provide the environment variable
-const port=process.env.PORT || 8000
+const port=process.env.PORT || 8080
 //By the time when we are going to deploy the website on the port We nerver know that at which port is free:::
 
 //Connection the mongoose
