@@ -9,10 +9,10 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "��#\u0000 \u0000B\u0000l\u0000o\u0000g\u0000i\u0000f\u0000y\u0000\r\u0000 \u0000",
   "dependencies": {
     "cookie-parser": "^1.4.7",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",

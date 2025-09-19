@@ -12,9 +12,7 @@ router.get('/signup', (req, res) => {
 router.post('/signin', async (req, res) => {
     try{
         const { email, password } = req.body
-        // const nuser = await user.matchpassword(email, password)
         const token = await user.matchpasswordandgeneratetoken(email, password)
-        // console.log(token);.
         return res.cookie('token' , token).redirect('/')
     }catch (err){
         return res.render('signin' , {
@@ -24,7 +22,6 @@ router.post('/signin', async (req, res) => {
 })
 
 router.post('/signup', async (req, res) => {
-    // console.log("hit the route");
     try {
         const { fullname, email, password } = req.body;
         const newUser = await user.create({
@@ -34,10 +31,8 @@ router.post('/signup', async (req, res) => {
         });
         return res.status(200).redirect('/');
     } catch (error) {
-        // console.error("Error creating user:", error);
-        // return res.status(500).json({ status: "Error occurred while signing up" });
         return res.render('signup' , {
-            error : err,
+            error : error,
         })
     }
 });
